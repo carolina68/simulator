@@ -17,13 +17,21 @@ namespace Simulator.Map
         public float ConnectionProximity { get; private set; } = 1.0f;
         public MapHolder MapHolder { get; set; }
 
-        public MapManagerData()
-        {
-            MapHolder = Object.FindObjectOfType<MapHolder>();
+        public void SetMapHolder(MapHolder holder) {
+            MapHolder = holder;
             if (MapHolder == null)
             {
                 Debug.LogError("Map is missing annotation MapHolder and child holders! Please add to scene and set holder transforms");
             }
+        }
+
+        public MapManagerData()
+        {
+            // MapHolder = Object.FindObjectOfType<MapHolder>();
+            // if (MapHolder == null)
+            // {
+            //     Debug.LogError("11Map is missing annotation MapHolder and child holders! Please add to scene and set holder transforms");
+            // }
         }
 
         public List<MapTrafficLane> GetTrafficLanes()

@@ -129,8 +129,8 @@ namespace Simulator.Map
             if (UnityEditor.Selection.activeGameObject != this.gameObject)
                 selectedColor = new Color(0f, 0f, 0f, 0f);
     #endif
-            if (MapAnnotationTool.SHOW_MAP_ALL || selected)
-                Draw();
+            // if (true)
+            //     Draw();
 
             //if (!MapAnnotationTool.SHOW_MAP_SELECTED)
             //    selected = false;

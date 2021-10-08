@@ -44,10 +44,10 @@ namespace Simulator.Map
                 var minDistLeft = 50f;
                 var minDistRight = 50f;
 
-                lane.leftLaneForward = null;
-                lane.leftLaneReverse = null;
-                lane.rightLaneForward = null;
-                lane.rightLaneReverse = null;
+                // lane.leftLaneForward = null;
+                // lane.leftLaneReverse = null;
+                // lane.rightLaneForward = null;
+                // lane.rightLaneReverse = null;
 
                 for (var j = 0; j < lanes.Count; j++)
                 {
@@ -75,7 +75,7 @@ namespace Simulator.Map
                             if (dist < minDistLeft) // closest lane left of lane is otherLane
                             {
                                 minDistLeft = dist;
-                                lane.leftLaneForward = otherLane;
+                                // lane.leftLaneForward = otherLane;
                             }
                         }
                         else if (cross > 0) // otherLane is right of lane
@@ -83,7 +83,7 @@ namespace Simulator.Map
                             if (dist < minDistRight) // closest lane right of lane is otherLane
                             {
                                 minDistRight = dist;
-                                lane.rightLaneForward = otherLane;
+                                // lane.rightLaneForward = otherLane;
                             }
                         }
 
@@ -101,7 +101,7 @@ namespace Simulator.Map
                             if (dist < minDistLeft) // closest lane left of lane is otherLane
                             {
                                 minDistLeft = dist;
-                                lane.leftLaneReverse = otherLane;
+                                // lane.leftLaneReverse = otherLane;
                             }
                         }
                         else if (cross > 0) // otherLane is right of lane
@@ -109,7 +109,7 @@ namespace Simulator.Map
                             if (dist < minDistRight) // closest lane right of lane is otherLane
                             {
                                 minDistRight = dist;
-                                lane.rightLaneReverse = otherLane;
+                                // lane.rightLaneReverse = otherLane;
                             }
                         }
 
@@ -119,14 +119,14 @@ namespace Simulator.Map
                             lanesReverse.Add(otherLane);
                     }
 
-                    if (lane.leftLaneForward != null) lane.leftLaneReverse = null; // null lane left reverse if not inside lane TODO right side
+                    // if (lane.leftLaneForward != null) lane.leftLaneReverse = null; // null lane left reverse if not inside lane TODO right side
                 }
             }
 
             if (isOneWay == null)
                 return;
 
-            UpdateLaneRelationsByBoundaryLines(lanes);
+            // UpdateLaneRelationsByBoundaryLines(lanes);
             VerifyLaneRelations(lanes);
 
             int wayCount = isOneWay.Value ? 1 : 2;

@@ -105,7 +105,11 @@ namespace Simulator.Editor
                 return false;
             }
 
+            var map = "/home/walle/meituan-autocar/autocar-devel/tools/ads_convert/modified_base_map.bin";
+            var apolloImport = new ApolloMapImporter(10f, 0.5f, true);
+            apolloImport.Import(map);
             MapAnnotationData = new MapManagerData();
+            MapAnnotationData.SetMapHolder(apolloImport.GetMapHolder());
             var allLanes = new HashSet<MapTrafficLane>(MapAnnotationData.GetData<MapTrafficLane>());
             var areAllLanesWithBoundaries = Lanelet2MapExporter.AreAllLanesWithBoundaries(allLanes, true);
             if (!areAllLanesWithBoundaries) return false;
@@ -286,7 +290,7 @@ namespace Simulator.Editor
         {
             // Check validity of lane segment builder relationship but it won't warn you if have A's right lane to be null or B's left lane to be null
             foreach (var laneSegment in LaneSegments)
-            {
+            {              
                 if (laneSegment.leftLaneForward != null && laneSegment != laneSegment.leftLaneForward.rightLaneForward ||
                     laneSegment.rightLaneForward != null && laneSegment != laneSegment.rightLaneForward.leftLaneForward)
                 {
@@ -1112,7 +1116,7 @@ namespace Simulator.Editor
             var roadLink = new OpenDRIVERoadLink();
             if (preRoadIds.Count > 0)
             {
-                if (preRoadIds.Count > 1 || JunctionRoadIds.Contains(GetOnlyItemFromSet(preRoadIds)))
+                if (preRoadIds.Count > 1 && JunctionRoadIds.Contains(GetOnlyItemFromSet(preRoadIds)))
                 {
                     // junction
                     roadPredecessor = new OpenDRIVERoadLinkPredecessor()
@@ -1146,7 +1150,7 @@ namespace Simulator.Editor
 
             if (sucRoadIds.Count > 0)
             {
-                if (sucRoadIds.Count > 1 || JunctionRoadIds.Contains(GetOnlyItemFromSet(sucRoadIds)))
+                if (sucRoadIds.Count > 1 && JunctionRoadIds.Contains(GetOnlyItemFromSet(sucRoadIds)))
                 {
                     roadSuccessor = new OpenDRIVERoadLinkSuccessor()
                     {
@@ -1278,9 +1282,10 @@ namespace Simulator.Editor
 
                 if (curJunctionId == "-1")
                 {
-                    Debug.LogWarning("A junction should not have id as -1, roadId: " + roadId + ". It might because your intersection has no signal/sign in it.");
-                    Debug.LogWarning("Creating a junction for this road.");
-                    curJunctionId = CreateJunctionWithoutControllers(roadIds);
+                    // Debug.LogWarning("A junction should not have id as -1, roadId: " + roadId + ". It might because your intersection has no signal/sign in it.");
+                    // curJunctionId = CreateJunctionWithoutControllers(roadIds);
+                    Roads[roadId].junction = "-1";
+                    // Debug.Log($"Creating a junction for road {roadId}: junction {Roads[roadId].junction}.");
                     continue;
                 }
 

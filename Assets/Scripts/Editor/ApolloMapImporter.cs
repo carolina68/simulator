@@ -32,6 +32,7 @@ using apollo.hdmap;
         GameObject Intersections;
         MapOrigin MapOrigin;
         Map ApolloMap;
+        MapHolder ApolloMapHolder;
         Dictionary<string, MapIntersection> Id2MapIntersection = new Dictionary<string, MapIntersection>();
         Dictionary<string, MapTrafficLane> Id2Lane = new Dictionary<string, MapTrafficLane>();
         Dictionary<string, Lane> Id2ApolloLane = new Dictionary<string, Lane>();
@@ -125,7 +126,7 @@ using apollo.hdmap;
             }
 
             GameObject map = new GameObject(mapName);
-            var mapHolder = map.AddComponent<MapHolder>();
+            ApolloMapHolder = map.AddComponent<MapHolder>();
 
             // Create TrafficLanes and Intersections under Map
             TrafficLanes = new GameObject("TrafficLanes");
@@ -135,10 +136,14 @@ using apollo.hdmap;
             Intersections.transform.parent = map.transform;
             SingleLaneRoads.transform.parent = TrafficLanes.transform;
 
-            mapHolder.trafficLanesHolder = TrafficLanes.transform;
-            mapHolder.intersectionsHolder = Intersections.transform;
+            ApolloMapHolder.trafficLanesHolder = TrafficLanes.transform;
+            ApolloMapHolder.intersectionsHolder = Intersections.transform;
 
             return true;
+        }
+
+        public MapHolder GetMapHolder() {
+            return ApolloMapHolder;
         }
 
         // read map origin, update MapOrigin
@@ -270,9 +275,9 @@ using apollo.hdmap;
                 mapLine.lineType = BoundaryTypeToLineType(boundary.boundary_type[0].types[0]);
             else mapLine.lineType = MapData.LineType.UNKNOWN;
 
-            var warning = "Multiple boundary types for one lane boundary is not"
-              + "supported yet, currently only the 1st type is used.";
-            if (boundary.boundary_type.Count > 1) Debug.LogWarning(warning);
+            // var warning = "Multiple boundary types for one lane boundary is not"
+            //   + "supported yet, currently only the 1st type is used.";
+            // if (boundary.boundary_type.Count > 1) Debug.LogWarning(warning);
 
             if (isLeft) Id2LeftLineBoundary[id] = mapLine;
             else Id2RightLineBoundary[id] = mapLine;
@@ -466,10 +471,10 @@ using apollo.hdmap;
         string RenameLine(string laneName, string otherLaneName)
         {
             var splittedName = laneName.Split('_');
-            var otherLaneNumber = int.Parse(otherLaneName.Split('_').Last());
-            var laneNumber = int.Parse(splittedName.Last());
+            var otherLaneNumber = otherLaneName.Split('_').Last();
+            var laneNumber = splittedName.Last();
             splittedName[1] = "Shared";
-            splittedName[splittedName.Length - 1] = laneNumber < otherLaneNumber ? laneNumber + "_" + otherLaneNumber : otherLaneNumber + "_" + laneNumber;
+            splittedName[splittedName.Length - 1] = otherLaneNumber + "_" + laneNumber;
             return String.Join("_", splittedName);
         }
 
